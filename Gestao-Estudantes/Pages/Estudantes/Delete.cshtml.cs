@@ -13,51 +13,68 @@ namespace Gestao_Estudantes.Pages.Estudantes
     public class DeleteModel : PageModel
     {
         private readonly Gestao_Estudantes.Data.Gestao_EstudantesContext _context;
+        private readonly ILogger<DeleteModel> _logger;
 
-        public DeleteModel(Gestao_Estudantes.Data.Gestao_EstudantesContext context)
+        public DeleteModel(Gestao_Estudantes.Data.Gestao_EstudantesContext context, ILogger<DeleteModel> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [BindProperty]
-      public Estudante Estudante { get; set; } = default!;
+        public Estudante Estudante { get; set; }
+        public string ErrorMessage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id, bool? saveChangesError = false)
         {
-            if (id == null || _context.Estudantes == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var estudante = await _context.Estudantes.FirstOrDefaultAsync(m => m.ID == id);
+            Estudante = await _context.Estudantes.
+                 AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
 
-            if (estudante == null)
+            if (Estudante == null)
             {
                 return NotFound();
             }
-            else 
+
+            if(saveChangesError.GetValueOrDefault())
             {
-                Estudante = estudante;
+                ErrorMessage = String.Format("Delete {ID} failed. Try again", id);
             }
+            
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Estudantes == null)
+            if (id == null)
             {
                 return NotFound();
             }
+
             var estudante = await _context.Estudantes.FindAsync(id);
 
             if (estudante != null)
             {
-                Estudante = estudante;
-                _context.Estudantes.Remove(Estudante);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
+            try
+            {
+                _context.Estudantes.Remove(estudante);
+                await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, ErrorMessage);
 
-            return RedirectToPage("./Index");
+                return RedirectToAction("./Delete",
+                    new { id, SaveChangesError = true });
+            }
         }
     }
 }

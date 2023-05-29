@@ -23,5 +23,7 @@ namespace Gestao_Estudantes.Data
             modelBuilder.Entity < Curso >().ToTable("Curso");
             modelBuilder.Entity< Inscricao >().ToTable("Inscricao");
         }
+
+        public DbSet<Gestao_Estudantes.Models.EstudanteVM> EstudanteVM { get; set; } = default!;
     }
 }

@@ -1,0 +1,44 @@
+﻿@page
+@model Gestao_Estudantes.Pages.Estudantes.CreateVMModel
+
+@{
+    ViewData["Title"] = "CreateVM";
+}
+
+<h1>CreateVM</h1>
+
+<h4>EstudanteVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EstudanteVM.Nome" class="control-label"></label>
+                <input asp-for="EstudanteVM.Nome" class="form-control" />
+                <span asp-validation-for="EstudanteVM.Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EstudanteVM.Apelido" class="control-label"></label>
+                <input asp-for="EstudanteVM.Apelido" class="form-control" />
+                <span asp-validation-for="EstudanteVM.Apelido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EstudanteVM.DataInscricao" class="control-label"></label>
+                <input asp-for="EstudanteVM.DataInscricao" class="form-control" />
+                <span asp-validation-for="EstudanteVM.DataInscricao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

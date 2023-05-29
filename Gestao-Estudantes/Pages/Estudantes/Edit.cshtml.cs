@@ -23,55 +23,43 @@ namespace Gestao_Estudantes.Pages.Estudantes
         [BindProperty]
         public Estudante Estudante { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? Id)
         {
-            if (id == null || _context.Estudantes == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var estudante =  await _context.Estudantes.FirstOrDefaultAsync(m => m.ID == id);
-            if (estudante == null)
+            Estudante = await _context.Estudantes.FindAsync(Id);
+
+            if (Estudante == null)
             {
                 return NotFound();
             }
-            Estudante = estudante;
             return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? Id)
         {
-            if (!ModelState.IsValid)
+            var estudanteToUpdate = await _context.Estudantes.FindAsync(Id);
+
+            if (estudanteToUpdate == null)
             {
-                return Page();
+                return NotFound();
             }
 
-            _context.Attach(Estudante).State = EntityState.Modified;
-
-            try
+            if (await TryUpdateModelAsync<Estudante>(
+                estudanteToUpdate,
+                "estudante",
+                s => s.Nome, s => s.Apelido, s => s.DataInscricao))
             {
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EstudanteExists(Estudante.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return RedirectToPage("./Index");
             }
 
-            return RedirectToPage("./Index");
-        }
-
-        private bool EstudanteExists(int id)
-        {
-          return (_context.Estudantes?.Any(e => e.ID == id)).GetValueOrDefault();
+            return Page();
         }
     }
 }
