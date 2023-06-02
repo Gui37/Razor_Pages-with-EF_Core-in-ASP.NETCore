@@ -29,7 +29,6 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<Gestao_EstudantesContext>();
-    context.Database.EnsureCreated();
     DbInitializer.Initialize(context);
 }
 

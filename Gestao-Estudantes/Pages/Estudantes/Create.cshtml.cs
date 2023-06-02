@@ -35,7 +35,7 @@ namespace Gestao_Estudantes.Pages.Estudantes
 
             if (await TryUpdateModelAsync<Estudante>(
                 emptyStudent,
-                "student",   // Prefix for form value.
+                "estudante",   // Prefix for form value.
                 s => s.Nome, s => s.Apelido, s => s.DataInscricao))
             {
                 _context.Estudantes.Add(emptyStudent);

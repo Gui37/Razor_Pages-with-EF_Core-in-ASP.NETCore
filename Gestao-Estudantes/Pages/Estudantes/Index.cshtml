@@ -2,40 +2,58 @@
 @model Gestao_Estudantes.Pages.Estudantes.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Estudantes";
 }
 
-<h1>Index</h1>
+<h1>Estudantes</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <button class="btn btn-outline-primary"><a asp-page="Create">Create New</a></button>
 </p>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Procurar por Nome:
+            <input type="text" name="searchFiltro" value="@Model.FiltroActual" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="./Index">Back to full List</a>
+        </p>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Estudante[0].Nome)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.NomeOrdem" 
+                asp-route-filtroActual="@Model.FiltroActual">
+                    Apelido
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Estudante[0].Apelido)
+               Nome
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Estudante[0].DataInscricao)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.DataOrdem"
+                asp-route-filtroActual="@Model.FiltroActual">
+               Data de Inscrição
+                </a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Estudante) {
+@foreach (var item in Model.Estudantes) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Nome)
+                    @Html.DisplayFor(modelItem => item.Apelido)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Apelido)
+                    @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DataInscricao)
+                    @Html.DisplayFor(modelItem => item.DataInscricao)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
@@ -46,3 +64,25 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.Estudantes.HasPreviousPage ? "Disabled" : "";
+    var nextDisabled = !Model.Estudantes.HasNextPage ? "Disabled" : "";
+}
+
+
+
+<a asp-page="./Index"
+   asp-route-ordemActual="@Model.OrdemActual"
+   asp-route-indexPagina="@(Model.Estudantes.IndexPagina - 1)"
+   asp-route-filtroActual="@Model.FiltroActual"
+   class="btn btn-primary @prevDisabled">
+    Anterior
+</a>
+<a asp-page="./Index"
+   asp-route-ordemActual="@Model.OrdemActual"
+   asp-route-indexPagina="@(Model.Estudantes.IndexPagina + 1)"
+   asp-route-filtroActual="@Model.FiltroActual"
+   class="btn btn-primary @nextDisabled">
+    Próximo
+</a>
