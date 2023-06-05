@@ -1,0 +1,44 @@
+﻿@page
+@model Gestao_Estudantes.Pages.Docentes.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Docente</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Docente.Apelido" class="control-label"></label>
+                <input asp-for="Docente.Apelido" class="form-control" />
+                <span asp-validation-for="Docente.Apelido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Docente.Nome" class="control-label"></label>
+                <input asp-for="Docente.Nome" class="form-control" />
+                <span asp-validation-for="Docente.Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Docente.DataContrato" class="control-label"></label>
+                <input asp-for="Docente.DataContrato" class="form-control" />
+                <span asp-validation-for="Docente.DataContrato" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
